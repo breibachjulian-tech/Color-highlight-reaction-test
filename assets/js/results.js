@@ -9,7 +9,7 @@ const COLOR_META = {
 function loadResults() {
   const raw = sessionStorage.getItem('reactionResults');
   if (!raw) {
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
     return [];
   }
   return JSON.parse(raw);
