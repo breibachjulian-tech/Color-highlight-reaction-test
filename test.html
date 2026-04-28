@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test — Valorant Color Reaction Test</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/test.css">
+</head>
+<body>
+
+  <!-- HUD: trial counter + current color name -->
+  <div id="hud">
+    <div id="trial-counter">30 Trials</div>
+    <div id="color-label"></div>
+  </div>
+
+  <!--
+    Full-screen click area. All pointerdown events on this element are
+    handled by test-engine.js, both valid clicks and false starts.
+  -->
+  <div id="test-area">
+    <!--
+      Target: pre-rendered on page load, hidden via opacity: 0.
+      Toggling the .visible class (opacity: 1) avoids layout reflow and
+      allows the GPU compositor to handle the change on its own layer.
+    -->
+    <div id="target"></div>
+  </div>
+
+  <!-- Full-screen reaction-time / false-start feedback overlay -->
+  <div id="feedback-flash" aria-live="polite"></div>
+
+  <!-- Bottom hint text -->
+  <div id="status-msg">Click anywhere to begin</div>
+
+  <script src="js/test-engine.js"></script>
+</body>
+</html>

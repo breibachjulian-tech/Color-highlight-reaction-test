@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorant Color Reaction Test</title>
+  <link rel="stylesheet" href="css/base.css">
+  <style>
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .landing h1 {
+      font-size: 2.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .landing h1 .highlight { color: var(--accent-red); }
+
+    .desc {
+      max-width: 520px;
+      color: var(--text-secondary);
+      margin-top: 16px;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    /* Color pill badges */
+    .color-pills {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      justify-content: center;
+    }
+
+    .pill {
+      padding: 6px 22px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .pill-red    { background: var(--accent-red);    color: #fff; }
+    .pill-yellow { background: var(--accent-yellow); color: #1a1a1e; }
+    .pill-purple { background: var(--accent-purple); color: #fff; }
+
+    /* How-it-works card */
+    .how-it-works {
+      max-width: 480px;
+      margin-top: 36px;
+      text-align: left;
+      background-color: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+    }
+
+    .how-it-works .card-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .how-it-works ol {
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.9;
+    }
+
+    .start-wrap {
+      margin-top: 40px;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 0.76rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <main class="landing">
+    <h1>Valorant <span class="highlight">Color</span> Reaction Test</h1>
+
+    <p class="desc">
+      Discover which enemy highlight color: Red, Yellow, or Purple - gives you
+      the fastest reaction time. 30 quick trials, roughly 3 minutes total.
+    </p>
+
+    <div class="color-pills">
+      <span class="pill pill-red">Red</span>
+      <span class="pill pill-yellow">Yellow</span>
+      <span class="pill pill-purple">Purple</span>
+    </div>
+
+    <div class="how-it-works">
+      <p class="card-title">How It Works</p>
+      <ol>
+        <li>A colored circle appears on a dark background.</li>
+        <li>Click anywhere the moment you see it.</li>
+        <li>30 trials (10 per color) in random order.</li>
+        <li>See your mean, median, and best color at the end.</li>
+      </ol>
+    </div>
+
+    <div class="start-wrap">
+      <a class="btn btn-primary" href="test.html">Start Test</a>
+      <p class="note">Use a proper gaming mouse for the most accurate results.</p>
+    </div>
+  </main>
+</body>
+</html>
