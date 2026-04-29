@@ -51,6 +51,22 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  animation: page-enter 0.22s ease both;
+}
+
+body.page-exit {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+
 /* ── Buttons ── */
 
 .btn {
