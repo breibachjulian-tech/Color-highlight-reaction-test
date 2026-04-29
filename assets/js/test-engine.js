@@ -23,7 +23,6 @@ let results       = [];
 const testArea      = document.getElementById('test-area');
 const targetEl      = document.getElementById('target');
 const trialCounter  = document.getElementById('trial-counter');
-const colorLabel    = document.getElementById('color-label');
 const statusMsg     = document.getElementById('status-msg');
 const feedbackFlash = document.getElementById('feedback-flash');
 const resetBtn      = document.getElementById('reset-btn');
@@ -45,8 +44,6 @@ function startTrial() {
   state = 'idle';
 
   trialCounter.textContent       = `Trial ${currentIndex + 1} / ${trials.length}`;
-  colorLabel.textContent         = color.name;
-  colorLabel.style.color         = color.hex;
   targetEl.style.color = color.hex;
   hideTarget();
   statusMsg.textContent = '';
