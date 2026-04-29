@@ -26,6 +26,7 @@ const trialCounter  = document.getElementById('trial-counter');
 const colorLabel    = document.getElementById('color-label');
 const statusMsg     = document.getElementById('status-msg');
 const feedbackFlash = document.getElementById('feedback-flash');
+const resetBtn      = document.getElementById('reset-btn');
 
 function buildTrialList() {
   const list = [];
@@ -46,7 +47,7 @@ function startTrial() {
   trialCounter.textContent       = `Trial ${currentIndex + 1} / ${trials.length}`;
   colorLabel.textContent         = color.name;
   colorLabel.style.color         = color.hex;
-  targetEl.style.backgroundColor = color.hex;
+  targetEl.style.color = color.hex;
   hideTarget();
   statusMsg.textContent = '';
 
@@ -147,5 +148,23 @@ function finishTest() {
   sessionStorage.setItem('reactionResults', JSON.stringify(results));
   window.location.href = 'results.html';
 }
+
+function resetTest() {
+  clearTimeout(waitTimeout);
+  hideTarget();
+  hideFeedback();
+
+  trials       = buildTrialList();
+  currentIndex = 0;
+  results      = [];
+  state        = 'ready';
+
+  trialCounter.textContent = `${trials.length} Trials`;
+  colorLabel.textContent   = '';
+  colorLabel.style.color   = '';
+  statusMsg.textContent    = 'Click anywhere to begin';
+}
+
+resetBtn.addEventListener('click', resetTest);
 
 trials = buildTrialList();

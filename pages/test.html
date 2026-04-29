@@ -25,8 +25,18 @@
       Toggling the .visible class (opacity: 1) avoids layout reflow and
       allows the GPU compositor to handle the change on its own layer.
     -->
-    <div id="target"></div>
+    <svg id="target" viewBox="0 0 70 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="35" cy="10" r="9"  stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="35" y1="19" x2="35" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2"  y1="30" x2="68" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="35" y1="30" x2="35" y2="68" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="35" y1="68" x2="20" y2="106" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="35" y1="68" x2="50" y2="106" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
   </div>
+
+  <!-- Unobtrusive reset button, fixed to top-right corner -->
+  <button id="reset-btn" title="Reset test">↺ Reset</button>
 
   <!-- Full-screen reaction-time / false-start feedback overlay -->
   <div id="feedback-flash" aria-live="polite"></div>

@@ -18,6 +18,29 @@
   touch-action: manipulation; /* suppress 300 ms mobile tap delay */
 }
 
+/* Reset button: fixed top-right, subtle so it doesn't draw attention mid-test */
+#reset-btn {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 10;
+  background: transparent;
+  border: 1px solid #333;
+  color: #555;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+#reset-btn:hover {
+  border-color: #666;
+  color: var(--text-primary);
+}
+
 /* HUD pinned to top-center; pointer-events: none so it doesn't eat clicks */
 #hud {
   position: fixed;
@@ -67,13 +90,13 @@
  * changes — this minimises rendering latency between rAF and first paint.
  */
 #target {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+  width: 70px;
+  height: 110px;
   opacity: 0;
-  pointer-events: none; /* clicks pass through to #test-area */
+  pointer-events: none;
   will-change: opacity;
-  transition: none; /* instant — no CSS easing */
+  transition: none;
+  overflow: visible;
 }
 
 #target.visible {
