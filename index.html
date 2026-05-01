@@ -6,119 +6,294 @@
   <title>Valorant Color Reaction Test</title>
   <link rel="stylesheet" href="assets/css/base.css">
   <style>
+    /* ── Layout ── */
     .landing {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 32px;
+      padding: 48px 32px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .landing h1 {
-      font-size: 2.4rem;
-      letter-spacing: 0.06em;
+    /* Tactical grid background */
+    .landing::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,70,85,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,70,85,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Diagonal accent line — top-left */
+    .landing::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 420px; height: 3px;
+      background: linear-gradient(90deg, var(--val-red), transparent);
+      transform-origin: left top;
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 620px;
+    }
+
+    /* ── Eyebrow label ── */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
+      color: var(--val-red);
+      margin-bottom: 18px;
     }
 
-    .landing h1 .highlight { color: var(--accent-red); }
+    .eyebrow-line {
+      display: block;
+      width: 32px;
+      height: 2px;
+      background: var(--val-red);
+    }
 
-    .desc {
-      max-width: 520px;
-      color: var(--text-secondary);
-      margin-top: 16px;
+    /* ── Heading ── */
+    .landing h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+
+    .landing h1 .highlight {
+      color: var(--val-red);
+      display: block;
+      font-size: clamp(3.6rem, 10vw, 6.4rem);
+    }
+
+    /* ── Sub-heading ── */
+    .subtitle {
+      font-family: var(--font-display);
       font-size: 1rem;
-      line-height: 1.75;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-accent);
+      margin-top: 14px;
     }
 
-    /* Color pill badges */
+    /* ── Divider ── */
+    .val-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .val-divider::before,
+    .val-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,70,85,0.25);
+    }
+
+    .val-diamond {
+      width: 8px; height: 8px;
+      background: var(--val-red);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ── Desc ── */
+    .desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      max-width: 460px;
+    }
+
+    /* ── Color badges ── */
     .color-pills {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       margin-top: 28px;
       justify-content: center;
     }
 
     .pill {
-      padding: 6px 22px;
-      border-radius: 999px;
-      font-size: 0.82rem;
+      padding: 5px 20px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
     }
 
     .pill-red    { background: var(--accent-red);    color: #fff; }
-    .pill-yellow { background: var(--accent-yellow); color: #1a1a1e; }
+    .pill-yellow { background: var(--accent-yellow); color: #0F1923; }
     .pill-purple { background: var(--accent-purple); color: #fff; }
 
-    /* How-it-works card */
+    /* ── How-it-works panel ── */
     .how-it-works {
+      margin-top: 32px;
+      width: 100%;
       max-width: 480px;
-      margin-top: 36px;
-      text-align: left;
-      background-color: var(--bg-card);
-      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid rgba(255,70,85,0.15);
+      border-top: 2px solid var(--val-red);
       padding: 24px 28px;
+      text-align: left;
+      position: relative;
     }
 
-    .how-it-works .card-title {
-      font-size: 0.72rem;
+    /* Corner accent */
+    .how-it-works::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 18px; height: 18px;
+      border-bottom: 2px solid var(--val-red);
+      border-right: 2px solid var(--val-red);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
+      letter-spacing: 0.22em;
+      color: var(--val-red);
+      margin-bottom: 14px;
     }
 
     .how-it-works ol {
-      padding-left: 20px;
+      padding-left: 18px;
       color: var(--text-secondary);
-      font-size: 0.9rem;
-      line-height: 1.9;
+      font-size: 0.95rem;
+      line-height: 2;
     }
 
+    .how-it-works li::marker {
+      color: var(--val-red);
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    /* ── CTA area ── */
     .start-wrap {
-      margin-top: 40px;
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
     }
 
     .note {
-      margin-top: 12px;
-      font-size: 0.76rem;
-      color: #555;
+      font-size: 0.74rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    /* ── Corner decorations (fixed) ── */
+    .corner {
+      position: fixed;
+      width: 40px; height: 40px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .corner--tl { top: 20px; left: 20px; border-top: 2px solid var(--val-red); border-left: 2px solid var(--val-red); }
+    .corner--tr { top: 20px; right: 20px; border-top: 2px solid var(--val-red); border-right: 2px solid var(--val-red); }
+    .corner--bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--val-red); border-left: 2px solid var(--val-red); }
+    .corner--br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--val-red); border-right: 2px solid var(--val-red); }
+
+    /* Top red bar */
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--val-red) 30%, var(--val-red) 70%, transparent);
+      z-index: 100;
     }
   </style>
 </head>
 <body>
+  <div class="top-bar"></div>
+  <div class="corner corner--tl"></div>
+  <div class="corner corner--tr"></div>
+  <div class="corner corner--bl"></div>
+  <div class="corner corner--br"></div>
+
   <main class="landing">
-    <h1>Valorant <span class="highlight">Color</span> Reaction Test</h1>
+    <div class="content">
 
-    <p class="desc">
-      Discover which enemy highlight color: Red, Yellow, or Purple - gives you
-      the fastest reaction time. 30 quick trials, roughly 3 minutes total.
-    </p>
+      <div class="eyebrow">
+        <span class="eyebrow-line"></span>
+        Performance Test
+        <span class="eyebrow-line"></span>
+      </div>
 
-    <div class="color-pills">
-      <span class="pill pill-red">Red</span>
-      <span class="pill pill-yellow">Yellow</span>
-      <span class="pill pill-purple">Purple</span>
-    </div>
+      <h1>
+        Color
+        <span class="highlight">Reaction</span>
+      </h1>
+      <p class="subtitle">Enemy Highlight // Benchmark</p>
 
-    <div class="how-it-works">
-      <p class="card-title">How It Works</p>
-      <ol>
-        <li>A colored circle appears on a dark background.</li>
-        <li>Click anywhere the moment you see it.</li>
-        <li>30 trials (10 per color) in random order.</li>
-        <li>See your mean, median, and best color at the end.</li>
-      </ol>
-    </div>
+      <div class="val-divider"><div class="val-diamond"></div></div>
 
-    <div class="start-wrap">
-      <a class="btn btn-primary" href="pages/test.html">Start Test</a>
-      <p class="note">Use a proper gaming mouse for the most accurate results.</p>
+      <p class="desc">
+        Find out which enemy highlight color — Red, Yellow, or Purple — gives you
+        the fastest reaction time. 30 quick trials, roughly 3 minutes.
+      </p>
+
+      <div class="color-pills">
+        <span class="pill pill-red">Red</span>
+        <span class="pill pill-yellow">Yellow</span>
+        <span class="pill pill-purple">Purple</span>
+      </div>
+
+      <div class="how-it-works">
+        <p class="card-title">// Protocol</p>
+        <ol>
+          <li>A colored circle appears on a dark background.</li>
+          <li>Click anywhere the moment you see it.</li>
+          <li>30 trials (10 per color) in random order.</li>
+          <li>See your mean, median, and best color at the end.</li>
+        </ol>
+      </div>
+
+      <div class="start-wrap">
+        <a class="btn btn-primary" href="pages/test.html">Begin Test</a>
+        <p class="note">Use a gaming mouse for accurate results</p>
+      </div>
+
     </div>
   </main>
+
   <script src="assets/js/nav.js"></script>
 </body>
 </html>
