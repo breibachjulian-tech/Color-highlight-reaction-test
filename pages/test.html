@@ -9,21 +9,15 @@
 </head>
 <body>
 
-  <!-- HUD: trial counter -->
+  <div id="progress-bar-track">
+    <div id="progress-bar"></div>
+  </div>
+
   <div id="hud">
     <div id="trial-counter">30 Trials</div>
   </div>
 
-  <!--
-    Full-screen click area. All pointerdown events on this element are
-    handled by test-engine.js, both valid clicks and false starts.
-  -->
   <div id="test-area">
-    <!--
-      let gpu pre-render on page load, hidden via opacity: 0.
-      Toggling the .visible class (opacity: 1) avoids layout reflow and
-      allows the GPU compositor to handle the change on its own layer.
-    -->
     <svg id="target" viewBox="0 0 70 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="35" cy="10" r="9"  stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
       <line x1="35" y1="19" x2="35" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -34,13 +28,10 @@
     </svg>
   </div>
 
-  <!-- Unobtrusive reset button, fixed to top-right corner -->
   <button id="reset-btn" title="Reset test">↺ Reset</button>
 
-  <!-- Full-screen reaction-time / false-start feedback overlay -->
   <div id="feedback-flash" aria-live="polite"></div>
 
-  <!-- Bottom hint text -->
   <div id="status-msg">Click anywhere to begin</div>
 
   <script src="../assets/js/test-engine.js"></script>

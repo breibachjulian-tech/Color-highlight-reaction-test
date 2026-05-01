@@ -162,6 +162,27 @@
     .pill-yellow:hover { filter: drop-shadow(0 0 10px rgba(255,215,0,0.8)); }
     .pill-purple:hover { filter: drop-shadow(0 0 10px rgba(155,89,182,0.8)); }
 
+    .pill { cursor: pointer; }
+
+    #color-preview {
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #color-preview.active { opacity: 1; }
+
+    #preview-target {
+      width: 44px;
+      height: 70px;
+      transition: color 0.25s ease, filter 0.25s ease;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
     .how-it-works {
       margin-top: 32px;
       width: 100%;
@@ -334,6 +355,17 @@
         <span class="pill pill-purple">Purple</span>
       </div>
 
+      <div id="color-preview">
+        <svg id="preview-target" viewBox="0 0 70 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="35" cy="10" r="9"  stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <line x1="35" y1="19" x2="35" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <line x1="2"  y1="30" x2="68" y2="30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <line x1="35" y1="30" x2="35" y2="68" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <line x1="35" y1="68" x2="20" y2="106" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <line x1="35" y1="68" x2="50" y2="106" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+
       <div class="how-it-works reveal">
         <p class="card-title">// Protocol</p>
         <ol>
@@ -361,6 +393,19 @@
       const xPct = (e.clientX / window.innerWidth  - 0.5) * 24;
       const yPct = (e.clientY / window.innerHeight - 0.5) * 24;
       gridBg.style.backgroundPosition = `${xPct}px ${yPct}px`;
+    });
+
+    // Color preview on pill click
+    const COLOR_HEX = { red: '#FF4655', yellow: '#FFD700', purple: '#9B59B6' };
+    const previewEl     = document.getElementById('color-preview');
+    const previewTarget = document.getElementById('preview-target');
+
+    document.querySelectorAll('.pill').forEach(pill => {
+      const colorId = pill.classList[1].replace('pill-', '');
+      pill.addEventListener('click', () => {
+        previewTarget.style.color = COLOR_HEX[colorId];
+        previewEl.classList.add('active');
+      });
     });
 
     // Staggered reveal on load

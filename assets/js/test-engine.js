@@ -26,6 +26,13 @@ const trialCounter  = document.getElementById('trial-counter');
 const statusMsg     = document.getElementById('status-msg');
 const feedbackFlash = document.getElementById('feedback-flash');
 const resetBtn      = document.getElementById('reset-btn');
+const progressBar   = document.getElementById('progress-bar');
+
+const TOTAL_TRIALS  = COLORS.length * TRIALS_PER_COLOR;
+
+function updateProgress() {
+  progressBar.style.width = `${(currentIndex / TOTAL_TRIALS) * 100}%`;
+}
 
 function buildTrialList() {
   const list = [];
@@ -40,6 +47,7 @@ function buildTrialList() {
 }
 
 function startTrial() {
+  updateProgress();
   const color = trials[currentIndex];
   state = 'idle';
 
@@ -140,8 +148,36 @@ function hideFeedback() {
   feedbackFlash.textContent = '';
 }
 
+function savePBIfBetter(results) {
+  const grouped = {};
+  for (const { colorId, reactionTime } of results) {
+    if (!grouped[colorId]) grouped[colorId] = [];
+    grouped[colorId].push(reactionTime);
+  }
+
+  function localMedian(arr) {
+    const s = [...arr].sort((a, b) => a - b);
+    const m = Math.floor(s.length / 2);
+    return s.length % 2 === 0 ? (s[m - 1] + s[m]) / 2 : s[m];
+  }
+
+  const bestMedian = Math.min(...Object.values(grouped).map(localMedian));
+  const stored = localStorage.getItem('pbMedian');
+  const prev   = stored !== null ? parseFloat(stored) : null;
+
+  localStorage.setItem('pbMedian', bestMedian);
+  localStorage.setItem('pbIsNew', prev === null || bestMedian < prev ? 'true' : 'false');
+  if (prev !== null) {
+    localStorage.setItem('pbPrev', prev);
+  } else {
+    localStorage.removeItem('pbPrev');
+  }
+}
+
 function finishTest() {
+  updateProgress();
   statusMsg.textContent = 'Done! Loading results…';
+  savePBIfBetter(results);
   sessionStorage.setItem('reactionResults', JSON.stringify(results));
   window.location.href = 'results.html';
 }
@@ -154,6 +190,7 @@ function resetTest() {
   trials       = buildTrialList();
   currentIndex = 0;
   results      = [];
+  updateProgress();
   state        = 'ready';
 
   trialCounter.textContent = `${trials.length} Trials`;

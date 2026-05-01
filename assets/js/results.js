@@ -59,6 +59,50 @@ function computeStats(results) {
   return grouped;
 }
 
+const TIERS = [
+  { label: 'RADIANT',  maxMs: 180,      color: '#FFD700' },
+  { label: 'DIAMOND',  maxMs: 220,      color: '#88c0d0' },
+  { label: 'PLATINUM', maxMs: 260,      color: '#4caf8e' },
+  { label: 'GOLD',     maxMs: 300,      color: '#e5c36e' },
+  { label: 'SILVER',   maxMs: 350,      color: '#aab8c2' },
+  { label: 'BRONZE',   maxMs: 420,      color: '#cd7f32' },
+  { label: 'IRON',     maxMs: Infinity, color: '#768079' },
+];
+
+function renderTier(medianMs) {
+  const tier      = TIERS.find(t => medianMs < t.maxMs);
+  const tierLabel = document.getElementById('tier-label');
+  tierLabel.textContent  = tier.label;
+  tierLabel.style.color  = tier.color;
+}
+
+function animateCountUp(el, targetValue, duration) {
+  const start    = performance.now();
+  const decimals = String(targetValue).includes('.') ? 1 : 0;
+
+  function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased    = progress * (2 - progress);
+    el.textContent = (eased * targetValue).toFixed(decimals);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function renderPersonalBest() {
+  const isNew = localStorage.getItem('pbIsNew') === 'true';
+  const prev  = localStorage.getItem('pbPrev');
+  const pbEl  = document.getElementById('pb-info');
+  if (!pbEl) return;
+
+  if (isNew) {
+    pbEl.innerHTML = `<span id="pb-badge">NEW BEST</span>`;
+  } else if (prev !== null) {
+    pbEl.innerHTML = `<span id="pb-prev">Previous best: <strong>${parseFloat(prev).toFixed(1)} ms</strong></span>`;
+  }
+}
+
 function renderWinner(stats) {
   let bestId     = null;
   let bestMedian = Infinity;
@@ -79,6 +123,7 @@ function renderWinner(stats) {
   document.getElementById('winner-ms').textContent   = `${bestMedian} ms`;
   document.getElementById('winner-ms').style.color   = meta.hex;
   document.getElementById('winner-name').textContent = `${meta.name} — lowest median reaction time`;
+  renderTier(bestMedian);
 }
 
 function renderTable(stats) {
@@ -98,13 +143,18 @@ function renderTable(stats) {
         <span class="color-swatch" style="background:${meta.hex}"></span>
         ${meta.name}
       </td>
-      <td>${s.mean}</td>
-      <td><strong>${s.median}</strong></td>
-      <td>${s.stdDev}</td>
+      <td class="stat-num">0</td>
+      <td><strong class="stat-num">0</strong></td>
+      <td class="stat-num">0</td>
       <td>${s.times.length}</td>
     `;
 
     tbody.appendChild(row);
+
+    const nums = row.querySelectorAll('.stat-num');
+    animateCountUp(nums[0], s.mean,   800);
+    animateCountUp(nums[1], s.median, 800);
+    animateCountUp(nums[2], s.stdDev, 800);
   }
 }
 
@@ -174,4 +224,5 @@ function renderChart(stats) {
   renderWinner(stats);
   renderTable(stats);
   renderChart(stats);
+  renderPersonalBest();
 })();
