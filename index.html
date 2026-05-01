@@ -6,8 +6,7 @@
   <title>Valorant Color Reaction Test</title>
   <link rel="stylesheet" href="assets/css/base.css">
   <style>
-    /* ── Layout ── */
-    .landing {
+.landing {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -16,31 +15,18 @@
       padding: 48px 32px;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
 
-    /* Tactical grid background */
-    .landing::before {
-      content: '';
+    .grid-bg {
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,70,85,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,70,85,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(255,70,85,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,70,85,0.045) 1px, transparent 1px);
       background-size: 48px 48px;
       pointer-events: none;
       z-index: 0;
-    }
-
-    /* Diagonal accent line — top-left */
-    .landing::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 420px; height: 3px;
-      background: linear-gradient(90deg, var(--val-red), transparent);
-      transform-origin: left top;
-      z-index: 1;
+      transition: background-position 0.08s linear;
     }
 
     .content {
@@ -52,7 +38,17 @@
       max-width: 620px;
     }
 
-    /* ── Eyebrow label ── */
+    /* Staggered entrance */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .eyebrow {
       display: flex;
       align-items: center;
@@ -73,7 +69,6 @@
       background: var(--val-red);
     }
 
-    /* ── Heading ── */
     .landing h1 {
       font-family: var(--font-display);
       font-size: clamp(2.8rem, 8vw, 5rem);
@@ -90,8 +85,7 @@
       font-size: clamp(3.6rem, 10vw, 6.4rem);
     }
 
-    /* ── Sub-heading ── */
-    .subtitle {
+.subtitle {
       font-family: var(--font-display);
       font-size: 1rem;
       letter-spacing: 0.2em;
@@ -100,7 +94,6 @@
       margin-top: 14px;
     }
 
-    /* ── Divider ── */
     .val-divider {
       display: flex;
       align-items: center;
@@ -123,9 +116,14 @@
       background: var(--val-red);
       transform: rotate(45deg);
       flex-shrink: 0;
+      animation: diamond-pulse 2.4s ease-in-out infinite;
     }
 
-    /* ── Desc ── */
+    @keyframes diamond-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,70,85,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(255,70,85,0); }
+    }
+
     .desc {
       color: var(--text-secondary);
       font-size: 1rem;
@@ -134,7 +132,6 @@
       max-width: 460px;
     }
 
-    /* ── Color badges ── */
     .color-pills {
       display: flex;
       gap: 8px;
@@ -150,13 +147,21 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .pill:hover {
+      transform: translateY(-3px) scale(1.06);
     }
 
     .pill-red    { background: var(--accent-red);    color: #fff; }
     .pill-yellow { background: var(--accent-yellow); color: #0F1923; }
     .pill-purple { background: var(--accent-purple); color: #fff; }
 
-    /* ── How-it-works panel ── */
+    .pill-red:hover    { filter: drop-shadow(0 0 10px rgba(255,70,85,0.8)); }
+    .pill-yellow:hover { filter: drop-shadow(0 0 10px rgba(255,215,0,0.8)); }
+    .pill-purple:hover { filter: drop-shadow(0 0 10px rgba(155,89,182,0.8)); }
+
     .how-it-works {
       margin-top: 32px;
       width: 100%;
@@ -167,9 +172,14 @@
       padding: 24px 28px;
       text-align: left;
       position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    /* Corner accent */
+    .how-it-works:hover {
+      border-color: rgba(255,70,85,0.35);
+      box-shadow: 0 0 32px rgba(255,70,85,0.08);
+    }
+
     .how-it-works::after {
       content: '';
       position: absolute;
@@ -196,19 +206,44 @@
       line-height: 2;
     }
 
+    .how-it-works li {
+      transition: color 0.15s;
+    }
+
+    .how-it-works li:hover {
+      color: var(--text-primary);
+    }
+
     .how-it-works li::marker {
       color: var(--val-red);
       font-weight: 700;
       font-family: var(--font-display);
     }
 
-    /* ── CTA area ── */
     .start-wrap {
       margin-top: 36px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 14px;
+      position: relative;
+    }
+
+    /* Pulsing ring behind the CTA */
+    .btn-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 100%; height: 100%;
+      border: 1px solid var(--val-red);
+      transform: translate(-50%, -50%);
+      animation: ring-pulse 2.8s ease-out infinite;
+      pointer-events: none;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+
+    @keyframes ring-pulse {
+      0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(1.5);  opacity: 0; }
     }
 
     .note {
@@ -218,20 +253,25 @@
       color: var(--text-secondary);
     }
 
-    /* ── Corner decorations (fixed) ── */
+    /* Corner brackets with draw-in animation */
     .corner {
-      position: fixed;
+      position: absolute;
       width: 40px; height: 40px;
       pointer-events: none;
       z-index: 10;
+      overflow: hidden;
     }
 
-    .corner--tl { top: 20px; left: 20px; border-top: 2px solid var(--val-red); border-left: 2px solid var(--val-red); }
-    .corner--tr { top: 20px; right: 20px; border-top: 2px solid var(--val-red); border-right: 2px solid var(--val-red); }
-    .corner--bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--val-red); border-left: 2px solid var(--val-red); }
-    .corner--br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--val-red); border-right: 2px solid var(--val-red); }
+    @keyframes draw-corner-tl {
+      from { clip-path: polygon(0 0, 0 0, 0 0, 0 0); }
+      to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    }
 
-    /* Top red bar */
+    .corner--tl { top: 20px; left: 20px; border-top: 2px solid var(--val-red); border-left: 2px solid var(--val-red); animation: draw-corner-tl 0.4s 0.1s ease both; }
+    .corner--tr { top: 20px; right: 20px; border-top: 2px solid var(--val-red); border-right: 2px solid var(--val-red); animation: draw-corner-tl 0.4s 0.2s ease both; }
+    .corner--bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--val-red); border-left: 2px solid var(--val-red); animation: draw-corner-tl 0.4s 0.3s ease both; }
+    .corner--br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--val-red); border-right: 2px solid var(--val-red); animation: draw-corner-tl 0.4s 0.4s ease both; }
+
     .top-bar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -239,44 +279,62 @@
       background: linear-gradient(90deg, transparent, var(--val-red) 30%, var(--val-red) 70%, transparent);
       z-index: 100;
     }
+
+    /* Scanline overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.04) 3px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
   <div class="top-bar"></div>
-  <div class="corner corner--tl"></div>
-  <div class="corner corner--tr"></div>
-  <div class="corner corner--bl"></div>
-  <div class="corner corner--br"></div>
+  <div class="grid-bg" id="gridBg"></div>
+  <div class="scanlines"></div>
 
-  <main class="landing">
+<main class="landing">
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--tr"></div>
+    <div class="corner corner--bl"></div>
+    <div class="corner corner--br"></div>
+
     <div class="content">
 
-      <div class="eyebrow">
+      <div class="eyebrow reveal">
         <span class="eyebrow-line"></span>
         Performance Test
         <span class="eyebrow-line"></span>
       </div>
 
-      <h1>
+      <h1 class="reveal">
         Color
         <span class="highlight">Reaction</span>
       </h1>
-      <p class="subtitle">Enemy Highlight // Benchmark</p>
+      <p class="subtitle reveal">Enemy Highlight // Benchmark</p>
 
-      <div class="val-divider"><div class="val-diamond"></div></div>
+      <div class="val-divider reveal"><div class="val-diamond"></div></div>
 
-      <p class="desc">
+      <p class="desc reveal">
         Find out which enemy highlight color — Red, Yellow, or Purple — gives you
         the fastest reaction time. 30 quick trials, roughly 3 minutes.
       </p>
 
-      <div class="color-pills">
+      <div class="color-pills reveal">
         <span class="pill pill-red">Red</span>
         <span class="pill pill-yellow">Yellow</span>
         <span class="pill pill-purple">Purple</span>
       </div>
 
-      <div class="how-it-works">
+      <div class="how-it-works reveal">
         <p class="card-title">// Protocol</p>
         <ol>
           <li>A colored circle appears on a dark background.</li>
@@ -286,7 +344,8 @@
         </ol>
       </div>
 
-      <div class="start-wrap">
+      <div class="start-wrap reveal">
+        <div class="btn-ring"></div>
         <a class="btn btn-primary" href="pages/test.html">Begin Test</a>
         <p class="note">Use a gaming mouse for accurate results</p>
       </div>
@@ -295,5 +354,20 @@
   </main>
 
   <script src="assets/js/nav.js"></script>
+  <script>
+// Grid parallax on mouse move
+    const gridBg = document.getElementById('gridBg');
+    document.addEventListener('mousemove', e => {
+      const xPct = (e.clientX / window.innerWidth  - 0.5) * 24;
+      const yPct = (e.clientY / window.innerHeight - 0.5) * 24;
+      gridBg.style.backgroundPosition = `${xPct}px ${yPct}px`;
+    });
+
+    // Staggered reveal on load
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach((el, i) => {
+      setTimeout(() => el.classList.add('in'), 120 + i * 90);
+    });
+  </script>
 </body>
 </html>
